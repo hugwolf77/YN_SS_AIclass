@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "yn-ss-aiclass"
+name = "yn_ss_aiclass"
 version = "0.1.0"
 description = "class practice"
 authors = ["hugwolf77 <hugwolf77@gmail.com>"]
@@ -9,7 +9,18 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 fastapi = "^0.110.0"
+redis = "^5.0.3"
+uvicorn = "^0.29.0"
+sqlalchemy = "^2.0.29"
+python-dotenv = "^1.0.1"
+tqdm = "^4.66.2"
+scikit-learn = "^1.4.1.post1"
 
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cu121"
+priority = "explicit"
 
 [build-system]
 requires = ["poetry-core"]
