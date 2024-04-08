@@ -2,11 +2,12 @@
 name = "yn_ss_aiclass"
 version = "0.1.0"
 description = "class practice"
-authors = ["hugwolf77 <hugwolf77@gmail.com>"]
+authors = ["Augustine77"]
 license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
+<<<<<<< HEAD
 python = "^3.12"
 fastapi = "^0.110.0"
 redis = "^5.0.3"
@@ -15,6 +16,9 @@ sqlalchemy = "^2.0.29"
 python-dotenv = "^1.0.1"
 tqdm = "^4.66.2"
 scikit-learn = "^1.4.1.post1"
+=======
+python = "^3.11"
+>>>>>>> 2d7de94ececdde1f1ec1cfa3d9137644df0434d8
 
 
 [[tool.poetry.source]]
