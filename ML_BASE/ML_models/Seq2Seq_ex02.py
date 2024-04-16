@@ -1,122 +1,80 @@
 import torch
 import torch.nn as nn
-import random
+import torch.nn.functional as F
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Encoder
-class Encoder(nn.Module):
-    def __init__(self, input_dim, emb_dim, hid_dim, n_layers, dropout):
-        super().__init__()
+class EncoderRNN(nn.Module):
+    def __init__(self, input_size, hidden_size):
+        super(EncoderRNN, self).__init__()
+        self.hidden_size = hidden_size
 
-        self.hid_dim = hid_dim
-        self.n_layers = n_layers
+        self.embedding = nn.Embedding(input_size, hidden_size)
+        self.gru = nn.GRU(hidden_size, hidden_size)
 
-        # embedding: 입력값을 emd_dim 벡터로 변경
-        self.embedding = nn.Embedding(input_dim, emb_dim)
+    def forward(self, input, hidden):
+        embedded = self.embedding(input).view(1, 1, -1)
+        output = embedded
+        output, hidden = self.gru(output, hidden)
+        return output, hidden
 
-        # embedding을 입력받아 hid_dim 크기의 hidden state, cell 출력
-        self.rnn = nn.LSTM(emb_dim, hid_dim, n_layers, dropout=dropout)
-
-        self.dropout = nn.Dropout(dropout)
-
-    def forward(self, src):
-        # sre: [src_len, batch_size]
-
-        embedded = self.dropout(self.embedding(src))
-
-        # initial hidden state는 zero tensor
-        outputs, (hidden, cell) = self.rnn(embedded)
-
-        # output: [src_len, batch_size, hid dim * n directions]
-        # hidden: [n layers * n directions, batch_size, hid dim]
-        # cell: [n layers * n directions, batch_size, hid dim]
-
-        return hidden, cell
+    def initHidden(self):
+        return torch.zeros(1, 1, self.hidden_size, device=device)
     
 # decoder
-class Decoder(nn.Module):
-    def __init__(self, output_dim, emb_dim, hid_dim, n_layers, dropout):
-        super().__init__()
+class DecoderRNN(nn.Module):
+    def __init__(self, hidden_size, output_size):
+        super(DecoderRNN, self).__init__()
+        self.hidden_size = hidden_size
 
-        self.output_dim = output_dim
-        self.hid_dim = hid_dim
-        self.n_layers = n_layers
+        self.embedding = nn.Embedding(output_size, hidden_size)
+        self.gru = nn.GRU(hidden_size, hidden_size)
+        self.out = nn.Linear(hidden_size, output_size)
+        self.softmax = nn.LogSoftmax(dim=1)
 
-        # content vector를 입력받아 emb_dim 출력
-        self.embedding = nn.Embedding(output_dim, emb_dim)
+    def forward(self, input, hidden):
+        output = self.embedding(input).view(1, 1, -1)
+        output = F.relu(output)
+        output, hidden = self.gru(output, hidden)
+        output = self.softmax(self.out(output[0]))
+        return output, hidden
 
-        # embedding을 입력받아 hid_dim 크기의 hidden state, cell 출력
-        self.rnn = nn.LSTM(emb_dim, hid_dim, n_layers, dropout=dropout)
+    def initHidden(self):
+        return torch.zeros(1, 1, self.hidden_size, device=device)
 
-        self.fc_out = nn.Linear(hid_dim, output_dim)
+class AttnDecoderRNN(nn.Module):
+    def __init__(self, hidden_size, output_size, dropout_p=0.1, max_length=10):
+        super(AttnDecoderRNN, self).__init__()
+        self.hidden_size = hidden_size
+        self.output_size = output_size
+        self.dropout_p = dropout_p
+        self.max_length = max_length
 
-        self.dropout = nn.Dropout(dropout)
+        self.embedding = nn.Embedding(self.output_size, self.hidden_size)
+        self.attn = nn.Linear(self.hidden_size * 2, self.max_length)
+        self.attn_combine = nn.Linear(self.hidden_size * 2, self.hidden_size)
+        self.dropout = nn.Dropout(self.dropout_p)
+        self.gru = nn.GRU(self.hidden_size, self.hidden_size)
+        self.out = nn.Linear(self.hidden_size, self.output_size)
 
-    def forward(self, input, hidden, cell):
-        # input: [batch_size]
-        # hidden: [n layers * n directions, batch_size, hid dim]
-        # cell: [n layers * n directions, batch_size, hid dim]
+    def forward(self, input, hidden, encoder_outputs):
+        embedded = self.embedding(input).view(1, 1, -1)
+        embedded = self.dropout(embedded)
 
-        input = input.unsqueeze(0) # input: [1, batch_size], 첫번째 input은 <SOS>
+        attn_weights = F.softmax(
+            self.attn(torch.cat((embedded[0], hidden[0]), 1)), dim=1)
+        attn_applied = torch.bmm(attn_weights.unsqueeze(0),
+                                 encoder_outputs.unsqueeze(0))
 
-        embedded = self.dropout(self.embedding(input)) # [1, batch_size, emd dim]
+        output = torch.cat((embedded[0], attn_applied[0]), 1)
+        output = self.attn_combine(output).unsqueeze(0)
 
-        output, (hidden, cell) = self.rnn(embedded, (hidden, cell))
-        # output: [seq len, batch_size, hid dim * n directions]
-        # hidden: [n layers * n directions, batch size, hid dim]
-        # cell: [n layers * n directions, batch size, hid dim]
+        output = F.relu(output)
+        output, hidden = self.gru(output, hidden)
 
-        prediction = self.fc_out(output.squeeze(0)) # [batch size, output dim]
-        
-        return prediction, hidden, cell
+        output = F.log_softmax(self.out(output[0]), dim=1)
+        return output, hidden, attn_weights
 
-
-# Seq2Seq
-class Seq2Seq(nn.Module):
-    def __init__(self, encoder, decoder, device):
-        super().__init__()
-
-        self.encoder = encoder
-        self.decoder = decoder
-        self.device = device
-
-        # encoder와 decoder의 hid_dim이 일치하지 않는 경우 에러메세지
-        assert encoder.hid_dim == decoder.hid_dim, \
-            'Hidden dimensions of encoder decoder must be equal'
-        # encoder와 decoder의 hid_dim이 일치하지 않는 경우 에러메세지
-        assert encoder.n_layers == decoder.n_layers, \
-            'Encoder and decoder must have equal number of layers'
-
-    def forward(self, src, trg, teacher_forcing_ratio=0.5):
-        # src: [src len, batch size]
-        # trg: [trg len, batch size]
-        
-        batch_size = trg.shape[1]
-        trg_len = trg.shape[0] # 타겟 토큰 길이 얻기
-        trg_vocab_size = self.decoder.output_dim # context vector의 차원
-
-        # decoder의 output을 저장하기 위한 tensor
-        outputs = torch.zeros(trg_len, batch_size, trg_vocab_size).to(self.device)
-
-        # initial hidden state
-        hidden, cell = self.encoder(src)
-
-        # 첫 번째 입력값 <sos> 토큰
-        input = trg[0,:]
-
-        for t in range(1,trg_len): # <eos> 제외하고 trg_len-1 만큼 반복
-            output, hidden, cell = self.decoder(input, hidden, cell)
-
-            # prediction 저장
-            outputs[t] = output
-
-            # teacher forcing을 사용할지, 말지 결정
-            teacher_force = random.random() < teacher_forcing_ratio
-
-            # 가장 높은 확률을 갖은 값 얻기
-            top1 = output.argmax(1)
-
-            # teacher forcing의 경우에 다음 lstm에 target token 입력
-            input = trg[t] if teacher_force else top1
-
-        return outputs
+    def initHidden(self):
+        return torch.zeros(1, 1, self.hidden_size, device=device)
