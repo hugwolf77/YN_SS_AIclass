@@ -13,11 +13,11 @@ model_class = {
             }
 
 class ML_runway:
-    def __init__(self, model_id, device="cpu") -> None:
-       self.model = model_class[model_id]["model"]
-       self.loader = model_class[model_id]["loader"] 
+    def __init__(self, NM, device="cpu") -> None:
+       self.model = model_class[NM]["model"]
+       self.loader = model_class[NM]["loader"] 
        self.device = device
-       self.predicter = model_class[model_id]["predicter"]
+       self.predicter = model_class[NM]["predicter"]
     
     def predict(self):
         return self.predicter(self.model, self.loader, self.device)
