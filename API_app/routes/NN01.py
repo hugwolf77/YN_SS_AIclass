@@ -9,14 +9,12 @@ import psutil
 
 import asyncio
 
-# from easycharts import ChartServer
-# from easyschedule import EasyScheduler
-
 from contextlib import asynccontextmanager
 
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
 # from DW.db.preprocessor import preprocess
 from API_app.model.dataclass import DataInput, PredictOutput
@@ -32,44 +30,7 @@ logger = logging.getLogger(__name__)
 templates = Jinja2Templates(directory="API_app/templates")
 
 ml_models = {}
-# scheduler = EasyScheduler()
-# every_minute = '* * * * *'
 
-# async def charts_setup(app: APIRouter):  
-#     asyncio.create_task(scheduler.start())
-#     app.charts = await ChartServer.create(
-#         app,
-#         charts_db='charts_database',
-#         chart_prefix='/mycharts'
-#     )
-#     # set initial sync time
-#     time_now = datetime.datetime.now().isoformat()[11:19]
-#     await app.charts.create_dataset(
-#     'cpu',
-#     labels=[time_now],
-#     dataset=[psutil.cpu_percent()]
-#     )
-#     await app.charts.create_dataset(
-#     'mem',
-#     labels=[time_now],
-#     dataset=[psutil.virtual_memory().percent]
-#     )
-    
-#     @scheduler(schedule=every_minute)
-#     async def resource_monitor(app):
-#         time_now=datetime.datetime.now().isoformat()[11:19]
-
-#         # updates CPU & MEM datasets with current time
-#         await app.charts.update_dataset(
-#             'cpu',
-#             label=time_now,
-#             data=psutil.cpu_percent()
-#         )
-#         await app.charts.update_dataset(
-#             'mem',
-#             label=time_now,
-#             data=psutil.virtual_memory().percent
-#         )
 
 @asynccontextmanager
 async def lifespan(app: APIRouter, NM):
@@ -86,6 +47,7 @@ NN01 = APIRouter(
     responses={404:{"description":"Not found"}},
     lifespan=lifespan
 ) # root에서 분리된 경로
+NN01.mount("/static", StaticFiles(directory="API_app/static"), name="static")
 
 random.seed()
 
@@ -94,6 +56,7 @@ async def NN01_branch_home(request: Request):
    # return {'msg' : 'this is model NN01'}
    return templates.TemplateResponse("NN01_home.html",{"request":request})
 
+### model
 async def generate_random_data(request: Request):
     """
     Generates random value between 0 and 100
@@ -116,11 +79,24 @@ async def chart_data(request: Request):
     response = StreamingResponse(generate_random_data(request), media_type="text/event-stream")
     response.headers["Cache-Control"] = "no-cache"
     response.headers["X-Accel-Buffering"] = "no"
-    return response
+
+    # time_label = []
+    # value_list = []
+    # time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # value = random.random() * 100
+    # time_label.pop().append(time)
+    # value_list.pop().append(value)
+
+    # data = { "data" : 
+    #             { 
+    #                 "time" : time,
+    #                 "value": value
+    #                 },
+    #         }
+    # data_json = json.dumps(data, ensure_ascii=False)
+    return templates.TemplateResponse("charts_example_01.html",{"request":request, "response":data_json})
 
 @NN01.post("/predict", tags=['NN01'], response_model=PredictOutput)
 async def NN01_predict(request_input: DataInput):
-   # NM = request_input.NM
-   # ml_models["chart"](NM)
    result =  ml_models["NN01"](request_input.x)
    return {'prediction' : result}
