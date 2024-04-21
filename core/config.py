@@ -11,7 +11,8 @@ class Settings:
     DB_PORT : str = os.getenv("DB_PORT",3306)
     DB_DATABASE : str = os.getenv("DB_DATABASE")
 	
-    DATABASE_URL = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}"
+    DATABASE_URL = 'sqlite:///./Items.db'
+    # DATABASE_URL = f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}"
 
 class Config:
     def __init__(self, model_id, gpu_id, batch_size):

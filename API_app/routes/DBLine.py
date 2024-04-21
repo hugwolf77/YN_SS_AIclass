@@ -1,10 +1,14 @@
 from typing import Optional
 from fastapi import APIRouter, Depends
+
+from API_app.model.dataclass import DataInput, PredictOutput
+
 from sqlalchemy.orm import Session
 from DW.db.connection import get_db
 from DW.db.crud import crud_test
 from DW.db.db_models import test_model
 from apis import test # main logic
+
 
 
 conDB = APIRouter(
@@ -21,4 +25,16 @@ def read_Item(db:Session=Depends(get_db)):
     return crud_test.get_items(db) #db.query(test_model.Test_Table).all()
 
 @conDB.post("/post")
-def create_Item()
+def create_Item(Input:DataInput,db:Session=Depends(get_db)):
+    DB_Table = test_model.Test_Table()
+    
+    db.add(DB_Table)
+    db.commit()
+    return Input
+
+# @conDB.put("/")
+# def update_Item
+
+# @conDB.delete("/")
+# def delete_Item():
+    
