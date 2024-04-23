@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
-from DW.db.session import Base
+from DW.DB.session import Base
 
 
 class Test_Table(Base):
