@@ -64,6 +64,7 @@
 
 
     let response ='{{response|safe}}'
+    console.log(response)
     let dataset = JSON.parse(response)
     let time = dataset.data.time
     let value = dataset.data.value

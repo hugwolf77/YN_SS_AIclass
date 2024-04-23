@@ -23,7 +23,11 @@ from core.config import Config
 from ML_BASE.ML_main import ML_runway
 
 # logging
-logging.basicConfig(stream=sys.stdout, level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(
+    # filename="log_example.log",
+    stream=sys.stdout, 
+    level=logging.INFO, 
+    format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -72,13 +76,15 @@ async def generate_random_data(request: Request):
             }
         )
         yield f"data:{json_data}\n\n"
+        # yield json_data
         await asyncio.sleep(1)
 
-@NN01.get("/chart-data")
+@NN01.get("/service-data")
 async def chart_data(request: Request):
-    response = StreamingResponse(generate_random_data(request), media_type="text/event-stream")
+    response = StreamingResponse(generate_random_data(request), media_type="text/event-stream") # media_type='application/x-ndjson') 
     response.headers["Cache-Control"] = "no-cache"
     response.headers["X-Accel-Buffering"] = "no"
+    return response # templates.TemplateResponse('charts_example_01.html',context={"request":request, "response":response})
 
     # time_label = []
     # value_list = []
@@ -94,7 +100,7 @@ async def chart_data(request: Request):
     #                 },
     #         }
     # data_json = json.dumps(data, ensure_ascii=False)
-    return templates.TemplateResponse("charts_example_01.html",{"request":request, "response":data_json})
+    # return templates.TemplateResponse("charts_example_01.html",{"request":request, "response":data_json})
 
 @NN01.post("/predict", tags=['NN01'], response_model=PredictOutput)
 async def NN01_predict(request_input: DataInput):

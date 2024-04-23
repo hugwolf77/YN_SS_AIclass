@@ -1,4 +1,6 @@
 # created by virtualenv automatically
 *.lock
+*.log
+
 __pycache__/
 .venv/
