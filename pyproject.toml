@@ -21,6 +21,8 @@ easycharts = "^0.106"
 easyschedule = "^0.107"
 requests = "^2.31.0"
 pytz = "^2024.1"
+pyqtgraph = "^0.13.6"
+pandas = "^2.2.2"
 
 
 [[tool.poetry.source]]
