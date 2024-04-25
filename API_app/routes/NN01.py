@@ -75,8 +75,8 @@ async def generate_random_data(request: Request):
                 "value": random.random() * 100,
             }
         )
-        yield f"data:{json_data}\n\n"
-        # yield json_data
+        # yield f"data:{json_data}\n\n"
+        yield json_data
         await asyncio.sleep(1)
 
 @NN01.get("/service-data")

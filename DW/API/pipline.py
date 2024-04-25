@@ -6,7 +6,7 @@ import dataclasses
 
 class pipe():
     def __init__(self):
-        self.__factors = pd.read_excel('./data_provider/DW/factors.xlsx', header=0).fillna('')
+        self.__factors = pd.read_excel('./DW/Storage/factors.xlsx', header=0).fillna('')
 
     def load_select_factor(self, service):
         return self.__factors # list(factors)

@@ -2,9 +2,9 @@ import requests
 import pandas as pd
 import os
 from dotenv import load_dotenv
-from ..dataclasses import api_request_param
+from .dataclasses import api_request_param
 # josn 형태 저장으로 변환??
-from ..form import BASE_URL, SERVICE_DICT, TRANS_DICT 
+from .form import BASE_URL, SERVICE_DICT, TRANS_DICT 
 
 class API_WORK:
     __MAX = 3
@@ -16,7 +16,7 @@ class API_WORK:
         return super().__new__(cls)
 
     def __init__(self, site, params:api_request_param): 
-        load_dotenv(dotenv_path="./config/.env",verbose=True)
+        load_dotenv(dotenv_path="./core/.env",verbose=True)
         self.__host_site = site
         self.__base_url = BASE_URL.get(site)
         self.__params = params

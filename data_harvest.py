@@ -3,14 +3,12 @@
 한국은행 통계시스템 ECOS 자료를 api를 사용하여
 데이터를 다운로드하고 원하는 DataFrame 형태로 가공하기 위한 API 접근 라이브러리
 '''
-
-#import sys
-# sys.path.append("/ECOS")
 import pandas as pd
-from DW import API_WORK
-from DW.dataclasses import api_request_param
-from DW.pipline import pipe
-from UI.GUI import DataView
+from DW.API import API_WORK
+from DW.API.dataclasses import api_request_param
+from DW.API.pipline import pipe
+from DW.API.form import SERVICE_DICT
+# from UI.DataView import DataViewer
 
 class data_harvest:
     # data_provider의 pipline 클라스를 통해서 필요한 factor를 가져옴.
@@ -57,15 +55,15 @@ class data_harvest:
 
 def main(site, service, sub_service):  
     # # 현재는 임시로 요청 저장이 있지만 원래 계획은  main() 에는 GUI class를 로드해서 사용할 예정
-    # params = api_request_param()
-    # params.service = SERVICE_DICT.get(site).get(service).get("service_name")  
-    # site_res = API_WORK(site, params=params)
-    # df = site_res.api_service(service=service, sub_service=sub_service, trans_colname=False)
-    # df.to_excel('./data_provider/DW/test_keystats_04.xlsx')
+    params = api_request_param()
+    params.service = SERVICE_DICT.get(site).get(service).get("service_name")  
+    site_res = API_WORK(site, params=params)
+    df = site_res.api_service(service=service, sub_service=sub_service, trans_colname=False)
+    df.to_excel('./DW/storage/test_keystats_01.xlsx')
    
-    harvest = data_harvest(site, service, sub_service)
-    result = harvest.do_it()
-    result.to_excel('./data_provider/DW/test_search_01.xlsx')
+    # harvest = data_harvest(site, service, sub_service)
+    # result = harvest.do_it()
+    # result.to_excel('./DW/Storage/test_search_01.xlsx')
 
 if __name__=="__main__":
     site = input(f"오픈데이터 시스템을 선택하세요. : ")

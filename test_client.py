@@ -1,3 +1,4 @@
+import sys
 import json
 from datetime import datetime
 from pytz import timezone
@@ -7,12 +8,19 @@ import asyncio
 
 import requests
 
+from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog)
+from UI.DataView import DataViewer
+
+view = DataViewer()
 
 URL = 'http://127.0.0.1:8000/NN01/service-data'
 
 with requests.get(url=URL, stream=True) as r:
     for chunk in r.iter_content(100):
-        print(f"Time: {datetime.now(timezone('Asia/Seoul'))}, data: {chunk}")
+        # print(f"Time: {datetime.now(timezone('Asia/Seoul'))}, data: {chunk}")
+        event = json.loads(chunk.decode("utf-8"))
+        
+        
 
 # async def get_json_events(url=URL):
 #     async with aiohttp.ClientSession() as session:
@@ -31,3 +39,6 @@ with requests.get(url=URL, stream=True) as r:
         
 # if __name__=="__main__":
 #     asyncio.run(main())
+    # app = QApplication(sys.argv)
+    # view = DataViewer()
+    # sys.exit(app.exec())
