@@ -1,6 +1,7 @@
 # api_app_main.py
 import sys
 import os
+import logging
 # from typing import Optional
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
@@ -10,6 +11,15 @@ import uvicorn
 
 from API_app.routes.NN01 import NN01 
 from API_app.routes.CONDB import CONDB
+
+# logging
+logging.basicConfig(
+    filename="./core/log_example.log",
+    #stream=sys.stdout, 
+    level=logging.INFO, 
+    format="%(asctime)s %(levelname)s %(message)s",
+    datefmt="%m/%d/%Y %I:%M:%S %p",)
+logger = logging.getLogger(__name__)
 
 app = FastAPI() # FastAPI 모듈 docs_url="/documentation", redoc_url=None)
 print(f"pwd: {os.getcwd()}")

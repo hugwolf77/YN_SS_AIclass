@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from DW.DB.crud import crud_test
+from DW.DB.query import crud
 
 def test_index(db):
-    something = crud_test.get_items(db)
+    something = crud.get_items(db)
     return something

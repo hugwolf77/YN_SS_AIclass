@@ -1,40 +1,27 @@
-import sys
+# import sys
+# import psutil
 import json
 import logging
 import random
 from datetime import datetime
-from typing import Iterator
-
-import psutil
+# from typing import Iterator
 
 import asyncio
-
 from contextlib import asynccontextmanager
 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-
-# from DW.db.preprocessor import preprocess
 from API_app.model.dataclass import DataInput, PredictOutput
 
-from core.config import Config
+# from core.config import Config
 from ML_BASE.ML_main import ML_runway
 
-# logging
-logging.basicConfig(
-    # filename="log_example.log",
-    stream=sys.stdout, 
-    level=logging.INFO, 
-    format="%(asctime)s %(levelname)s %(message)s")
-logger = logging.getLogger(__name__)
-
+logger = logging.getLogger("NN01")
 
 templates = Jinja2Templates(directory="API_app/templates")
-
 ml_models = {}
-
 
 @asynccontextmanager
 async def lifespan(app: APIRouter, NM):

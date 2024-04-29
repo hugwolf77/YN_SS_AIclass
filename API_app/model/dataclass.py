@@ -9,7 +9,7 @@ class Base_model(BaseModel):
     name: str
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 """ model Input Data specify """
