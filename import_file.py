@@ -1,6 +1,6 @@
 import pandas as pd
 import sqlite3
-from DW.DB.connection import get_db, conn_db
+from DW.DB.async_connection import get_db, conn_db
 
 
 df = pd.read_excel('./DW/storage/test_keystats_01.xlsx')
