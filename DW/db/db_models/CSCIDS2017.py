@@ -5,12 +5,12 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base 
-from base_model import Base
+from .base_model import Base
 
-class CSCIDS2017_balanced_attk(Base):
-    """CSCIDS2017_balanced_attack model"""
-    __tablename__ = "CSCIDS2017_balanced_attk"
+class CSCIDS2017_BALANCED_ATTK(Base):
+    __tablename__ = "CSCIDS2017_BALANCED_ATTK"
     
+    Index = Column(Integer, primary_key=True)
     FLOW_ID = Column(Float)
     SOURCE_IP = Column(Float)
     SOURCE_PORT = Column(Float)
@@ -94,25 +94,29 @@ class CSCIDS2017_balanced_attk(Base):
     IDLE_STD = Column(Float)
     IDLE_MAX = Column(Float)
     IDLE_MIN = Column(Float)
-    LABE = Column(Float)
+    LABEL = Column(Float)
 
 
-class CSCIDS2017_fri_pm(Base):
-    __tablename__ = "CSCIDS2017_fri_pm"
+# class CSCIDS2017_fri_pm(Base):
+#     __tablename__ = "CSCIDS2017_fri_pm"
     
-    
-    
-class CSCIDS2017_fri_pm(Base):
-    __tablename__ = "CSCIDS2017_fri_pm"
-class CSCIDS2017_fri_pm(Base):
-    __tablename__ = "CSCIDS2017_fri_pm"       
-class CSCIDS2017_fri_pm(Base):
-    __tablename__ = "CSCIDS2017_fri_pm"
-class CSCIDS2017_fri_pm(Base):
-    __tablename__ = "CSCIDS2017_fri_pm"
-class CSCIDS2017_fri_pm(Base):
-    __tablename__ = "CSCIDS2017_fri_pm"
-class CSCIDS2017_fri_pm(Base):
-    __tablename__ = "CSCIDS2017_fri_pm"
-class CSCIDS2017_fri_pm(Base):
-    __tablename__ = "CSCIDS2017_fri_pm"    
+# class CSCIDS2017_fri_pm(Base):
+#     __tablename__ = "CSCIDS2017_fri_pm"
+
+# class CSCIDS2017_fri_pm(Base):
+#     __tablename__ = "CSCIDS2017_fri_pm"       
+
+# class CSCIDS2017_fri_pm(Base):
+#     __tablename__ = "CSCIDS2017_fri_pm"
+
+# class CSCIDS2017_fri_pm(Base):
+#     __tablename__ = "CSCIDS2017_fri_pm"
+
+# class CSCIDS2017_fri_pm(Base):
+#     __tablename__ = "CSCIDS2017_fri_pm"
+
+# class CSCIDS2017_fri_pm(Base):
+#     __tablename__ = "CSCIDS2017_fri_pm"
+
+# class CSCIDS2017_fri_pm(Base):
+#     __tablename__ = "CSCIDS2017_fri_pm"    

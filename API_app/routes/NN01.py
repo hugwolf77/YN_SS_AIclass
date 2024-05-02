@@ -28,7 +28,6 @@ async def lifespan(app: APIRouter, NM):
     # Load the ML model
     model = ML_runway(NM)
     ml_models["NN01"] = model.predict
-    # ml_models["chart"] = charts_setup
     yield
     ml_models.clear()
 
@@ -62,34 +61,20 @@ async def generate_random_data(request: Request):
                 "value": random.random() * 100,
             }
         )
-        # yield f"data:{json_data}\n\n"
-        yield json_data
+        yield f"data:{json_data}\n\n"
+        # yield json_data
         await asyncio.sleep(1)
 
-@NN01.get("/service-data")
+@NN01.post("/predict", tags=['NN01'], response_model=PredictOutput)
+async def NN01_predict(request_input: DataInput, request: Request):
+    client_ip = request.client.host
+    logger.info("Client %s connected for prediction result", client_ip)
+    result =  ml_models["NN01"](request_input.x)
+    return {'prediction' : result}
+
+@NN01.get("/realtime-fake-data")
 async def chart_data(request: Request):
     response = StreamingResponse(generate_random_data(request), media_type="text/event-stream") # media_type='application/x-ndjson') 
     response.headers["Cache-Control"] = "no-cache"
     response.headers["X-Accel-Buffering"] = "no"
-    return response # templates.TemplateResponse('charts_example_01.html',context={"request":request, "response":response})
-
-    # time_label = []
-    # value_list = []
-    # time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    # value = random.random() * 100
-    # time_label.pop().append(time)
-    # value_list.pop().append(value)
-
-    # data = { "data" : 
-    #             { 
-    #                 "time" : time,
-    #                 "value": value
-    #                 },
-    #         }
-    # data_json = json.dumps(data, ensure_ascii=False)
-    # return templates.TemplateResponse("charts_example_01.html",{"request":request, "response":data_json})
-
-@NN01.post("/predict", tags=['NN01'], response_model=PredictOutput)
-async def NN01_predict(request_input: DataInput):
-   result =  ml_models["NN01"](request_input.x)
-   return {'prediction' : result}
+    return response 

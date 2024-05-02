@@ -1,15 +1,8 @@
 # import sys
 # sys.path.append("D:/2024/Finance/NABI/NABI/core")
 
-import os
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, MetaData, Table, Column
 from sqlalchemy.orm import sessionmaker
-# from sqlalchemy.ext import 
-from sqlalchemy.ext.asyncio import (
-    AsyncSession,
-    async_sessionmaker,
-    create_async_engine,
-)
 from dotenv import load_dotenv
 from core.config import Settings
 
@@ -20,20 +13,19 @@ configs = Settings()
 SQLALCHEMY_DATABASE_URL = configs.DATABASE_URL 
 # engine = create_engine("sqlite+pysqlite:///:memory:", echo=True, future=True)
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL) # fast_executemany=True 사용가능 확인
+engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True) # fast_executemany=True 사용가능 확인
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
-# Base = declarative_base() ## 선언이 왜 여기 있어야 하지?
 
 def conn_db():
     db_conn = engine
     return db_conn
 
-def get_db():
-	db = SessionLocal()
+def get_session():
+	session = SessionLocal()
 	try:
-		yield db # DB 연결 성공한 경우, DB 세션 시작
+		yield session # DB 연결 성공한 경우, DB 세션 시작
 	finally:
-		db.close()
+		session.close()
 		# db 세션이 시작된 후, API 호출이 마무리되면 DB 세션을 닫아준다.
 
 
