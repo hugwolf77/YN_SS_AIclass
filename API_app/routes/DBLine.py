@@ -10,7 +10,8 @@ from DW.DB.query import crud
 # from apis import test # main logic
 
 conDB = APIRouter(
-    prefix="/conDB", # url 앞에 고정적으로 붙는 prefix path 추가
+    prefix="/conDB",
+    tags=['conDB'],# url 앞에 고정적으로 붙는 prefix path 추가
 ) # root에서 분리된 경로
 
 @conDB.get("/", status_code=status.HTTP_200_OK) # Route Path

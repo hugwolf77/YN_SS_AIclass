@@ -65,16 +65,16 @@ async def generate_random_data(request: Request):
         # yield json_data
         await asyncio.sleep(1)
 
+@NN01.get("/fakeStream")
+async def chart_data(request: Request):
+    response = StreamingResponse(generate_random_data(request), media_type="text/event-stream") # media_type='application/x-ndjson') 
+    response.headers["Cache-Control"] = "no-cache"
+    response.headers["X-Accel-Buffering"] = "no"
+    return response 
+
 @NN01.post("/predict", tags=['NN01'], response_model=PredictOutput)
 async def NN01_predict(request_input: DataInput, request: Request):
     client_ip = request.client.host
     logger.info("Client %s connected for prediction result", client_ip)
     result =  ml_models["NN01"](request_input.x)
     return {'prediction' : result}
-
-@NN01.get("/realtime-fake-data")
-async def chart_data(request: Request):
-    response = StreamingResponse(generate_random_data(request), media_type="text/event-stream") # media_type='application/x-ndjson') 
-    response.headers["Cache-Control"] = "no-cache"
-    response.headers["X-Accel-Buffering"] = "no"
-    return response 

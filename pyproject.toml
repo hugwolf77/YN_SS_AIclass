@@ -20,13 +20,6 @@ psutil = "^5.9.8"
 requests = "^2.31.0"
 pytz = "^2024.1"
 pyqtgraph = "^0.13.6"
-<<<<<<< HEAD
-pandas = "^2.2.2"
-openpyxl = "^3.1.2"
-=======
-
->>>>>>> 813babe (pull from main)
-
 
 [[tool.poetry.source]]
 name = "pytorch"
