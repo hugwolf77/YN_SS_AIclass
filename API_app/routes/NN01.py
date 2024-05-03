@@ -61,7 +61,7 @@ async def generate_random_data(request: Request):
                 "value": random.random() * 100,
             }
         )
-        yield f"data:{json_data}\n\n"
+        yield f"{json_data}\n"
         # yield json_data
         await asyncio.sleep(1)
 

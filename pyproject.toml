@@ -20,6 +20,8 @@ psutil = "^5.9.8"
 requests = "^2.31.0"
 pytz = "^2024.1"
 pyqtgraph = "^0.13.6"
+pandas = "^2.2.2"
+matplotlib = "^3.8.4"
 
 [[tool.poetry.source]]
 name = "pytorch"

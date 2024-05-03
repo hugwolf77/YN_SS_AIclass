@@ -1,44 +1,42 @@
-import sys
+import time
 import json
-from datetime import datetime
-from pytz import timezone
-
-import aiohttp
+import matplotlib.pyplot as plt
 import asyncio
+from requests import Session
 
-import requests
+class realTime_Graph:
+    def __init__(self, url):
+        self.url = url
+        self.time = list(range(100))
+        self.value = list(range(100))
 
-from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog)
-from UI.DataView import DataViewer
-
-view = DataViewer()
-
-URL = 'http://127.0.0.1:8000/NN01/service-data'
-
-with requests.get(url=URL, stream=True) as r:
-    for chunk in r.iter_content(100):
-        # print(f"Time: {datetime.now(timezone('Asia/Seoul'))}, data: {chunk}")
-        event = json.loads(chunk.decode("utf-8"))
+    async def receive_data(self):
+        session = Session()
+        with session.get(self.url, headers=None, stream=True) as res:
+            for data in res.iter_lines():
+                event = json.loads(data)
+                # print(f"time : {event["time"]},  value : {event["value"]}")
+                graph_data = dict(event)
+                time.sleep(0.9)
+                await self.update_graph(graph_data)
+            
+    async def update_graph(self, graph_data):
         
-        
+        self.time = self.time[1:]
+        self.time.append(self.time[-1]+1)
+        self.value = self.value[1:]
+        self.value.append(graph_data['value'])
+        plt.clf()
+        plt.plot(self.time, self.value)
+        plt.xlabel('step')
+        plt.ylabel('value')
+        plt.title('fake-Stream data graph')
+        plt.pause(0.1)
 
-# async def get_json_events(url=URL):
-#     async with aiohttp.ClientSession() as session:
-#         async with session.get(url=url) as resp:
-#             while True:
-#                 chunk = await resp.content.readline()
-#                 await asyncio.sleep(1)
-                
-#                 if not chunk:
-#                     break
-#                 yield json.loads(chunk.decode("utf-8"))
-                
-# async def main():
-#     async for event in get_json_events(URL):
-#         print(event)
-        
-# if __name__=="__main__":
-#     asyncio.run(main())
-    # app = QApplication(sys.argv)
-    # view = DataViewer()
-    # sys.exit(app.exec())
+    def start(self):
+        asyncio.run(self.receive_data())
+
+if __name__ == '__main__':
+    url = "http://127.0.0.1:8000/NN01/fakeStream"
+    realtime = realTime_Graph(url)
+    realtime.start()
