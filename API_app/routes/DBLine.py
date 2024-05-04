@@ -4,10 +4,19 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from API_app.model.dataclass import DataInput, PredictOutput
 
 from sqlalchemy.orm import Session
+<<<<<<< HEAD
 from DW.DB.connection import conn_db, get_session
 from DW.DB.query import crud
 # from DW.DB.db_models import test_model
 # from apis import test # main logic
+=======
+from DW.DB.connection import get_db
+from DW.DB.query import crud_test
+from DW.DB.db_models import test_model
+from apis import test # main logic
+
+
+>>>>>>> f39f572 (update 02)
 
 conDB = APIRouter(
     prefix="/conDB",
