@@ -6,7 +6,7 @@ from PySide6.QtCore import QFile, QIODevice
 from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog)
 from PySide6.QtUiTools import QUiLoader
 
-from .GraphScreen import GraphScreen
+from GraphScreen import GraphScreen
 
 class DataViewer(QWidget):
     __MAX_WIN = 1

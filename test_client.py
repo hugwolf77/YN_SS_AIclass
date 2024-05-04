@@ -1,8 +1,23 @@
+import sys
 import time
 import json
 import matplotlib.pyplot as plt
 import asyncio
 from requests import Session
+
+
+# 2024.03.10 a-1.0 basic
+import os
+from PySide6 import QtCore
+from PySide6.QtCore import QFile, QIODevice 
+from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog)
+from PySide6.QtUiTools import QUiLoader
+
+
+from GUI import DataView, GraphScreen
+
+DataViewer = DataView()
+
 
 class realTime_Graph:
     def __init__(self, url):
@@ -40,3 +55,8 @@ if __name__ == '__main__':
     url = "http://127.0.0.1:8000/NN01/fakeStream"
     realtime = realTime_Graph(url)
     realtime.start()
+
+
+    app = QApplication(sys.argv)
+    view = DataViewer()
+    sys.exit(app.exec())
