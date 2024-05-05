@@ -30,7 +30,8 @@ from sqlalchemy import select
 import pandas as pd
 from DW.DB.connection import get_session, conn_db
 
-df = pd.read_csv('./DW/storage/web_attacks_balanced.csv')
+# /home/augustine77/Lab_2024/p02_base/YN_SS_AIclass/DW/Storage/web_attacks_balanced.csv
+df = pd.read_csv('/home/augustine77/Lab_2024/p02_base/YN_SS_AIclass/DW/Storage/web_attacks_balanced.csv')
 col = [
     # "Index",
     "FLOW_ID",
@@ -132,7 +133,7 @@ print(db_con)
 if __name__=="__main__":
     # Base.metadata.create_all(db_con)
     # Base.metadata.bind(db_con)
-    # # asyncio.run(migrate_table())
+    # asyncio.run(migrate_table())
     # table_name = 'CSCIDS2017_BALANCED_ATTK'
     # if_exists = 'append' # 'replace', 'fail'
     # with db_con.connect() as con:

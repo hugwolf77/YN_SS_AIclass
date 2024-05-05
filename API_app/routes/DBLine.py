@@ -8,6 +8,11 @@ from DW.DB.connection import conn_db, get_session
 from DW.DB.query import crud
 # from DW.DB.db_models import test_model
 # from apis import test # main logic
+from DW.DB.connection import get_session
+from DW.DB.query import crud
+from DW.DB.db_models import base_model
+from API_app.apis import test # main logic
+
 
 conDB = APIRouter(
     prefix="/conDB",
@@ -22,7 +27,7 @@ def test_index(db: Session = Depends(get_session)):
     return {"res" : res,} # 결과
 
 @conDB.get("/read/{id}", status_code=status.HTTP_200_OK)
-def read_Item(Index,db:Session=Depends(get_session)):
+def read_Item(id,db:Session=Depends(get_session)):
     res = crud.get_item(id,db) #db.query(test_model.Test_Table).all()
     if res is None:
         raise HTTPException(status_code=404, detail="Id not found")

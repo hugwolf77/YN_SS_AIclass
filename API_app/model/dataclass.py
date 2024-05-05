@@ -23,7 +23,7 @@ class PredictOutput(BaseModel):
 
 """ 
 data name : CSCIDS2017
-target file count : 8 -> table 8
+target file count : 8 -> table 8s
 columns count  : 79 * 8  : 632
 total row count : ??    
 
