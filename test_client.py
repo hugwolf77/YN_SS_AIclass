@@ -14,9 +14,9 @@ from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog)
 from PySide6.QtUiTools import QUiLoader
 
 
-from GUI import DataView, GraphScreen
+# from GUI import DataView, GraphScreen
 
-DataViewer = DataView()
+# DataViewer = DataView()
 
 
 class realTime_Graph:
@@ -57,6 +57,6 @@ if __name__ == '__main__':
     realtime.start()
 
 
-    app = QApplication(sys.argv)
-    view = DataViewer()
-    sys.exit(app.exec())
+    # app = QApplication(sys.argv)
+    # view = DataViewer()
+    # sys.exit(app.exec())
