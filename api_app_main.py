@@ -12,6 +12,7 @@ import uvicorn
 from API_app.routes.NN01 import NN01 
 # from API_app.routes.conDB import conDB
 from API_app.routes.DBLine import conDB
+from API_app.routes.conWS import conWS
 
 # logging
 logging.basicConfig(
@@ -30,6 +31,7 @@ templates = Jinja2Templates(directory="./API_app/templates")
 
 app.include_router(NN01) # 다른 route파일들을 불러와 포함시킴
 app.include_router(conDB)
+app.include_router(conWS)
 
 @app.get("/", response_class=HTMLResponse) # Route root Path
 def root_index(request: Request):
