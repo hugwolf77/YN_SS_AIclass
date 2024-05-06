@@ -31,7 +31,7 @@
             data: {
                 labels: [],
                 datasets: [{
-                    label: "Fake Random Dataset",
+                    label: "Random Dataset",
                     backgroundColor: 'rgb(255, 99, 132)',
                     borderColor: 'rgb(255, 99, 132)',
                     data: [],
@@ -42,7 +42,7 @@
                 responsive: true,
                 title: {
                     display: true,
-                    text: 'Creating Real-Time Charts with FastAPI - fakeStream'
+                    text: 'Creating Real-Time Charts with FastAPI - faskStream'
                 },
                 tooltips: {
                     mode: 'index',
@@ -79,7 +79,7 @@
 
         source.onmessage = function (event) {
             const data = JSON.parse(event.data);
-
+            console.log(data)
             if (config.data.labels.length === 20) {
                 config.data.labels.shift();
                 config.data.datasets[0].data.shift();

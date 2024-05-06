@@ -9,7 +9,8 @@ from datetime import datetime
 import asyncio
 from contextlib import asynccontextmanager
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter
+from fastapi.requests import Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -43,7 +44,6 @@ random.seed()
 
 @NN01.get("/", response_class=HTMLResponse) # Route Path
 async def NN01_branch_home(request: Request):
-   # return {'msg' : 'this is model NN01'}
    return templates.TemplateResponse("NN01_home.html",{"request":request})
 
 ### model
@@ -61,13 +61,13 @@ async def generate_random_data(request: Request):
                 "value": random.random() * 100,
             }
         )
-        yield f"{json_data}\n"
-        # yield json_data
+        yield f"data:{json_data}\n\n"
+        # yield f"{json_data}\n\n"
         await asyncio.sleep(1)
 
 @NN01.get("/fakeStream")
 async def chart_data(request: Request):
-    response = StreamingResponse(generate_random_data(request), media_type="text/event-stream") # media_type='application/x-ndjson') 
+    response = StreamingResponse(generate_random_data(request), media_type='text/event-stream') # application/x-ndjson
     response.headers["Cache-Control"] = "no-cache"
     response.headers["X-Accel-Buffering"] = "no"
     return response 

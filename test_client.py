@@ -10,16 +10,16 @@ from requests import Session
 
 
 # 2024.03.10 a-1.0 basic
-import os
-from PySide6 import QtCore
-from PySide6.QtCore import QFile, QIODevice 
-from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog)
-from PySide6.QtUiTools import QUiLoader
+# import os
+# from PySide6 import QtCore
+# from PySide6.QtCore import QFile, QIODevice 
+# from PySide6.QtWidgets import (QApplication, QWidget, QFileDialog)
+# from PySide6.QtUiTools import QUiLoader
 
 
-# from GUI import DataView, GraphScreen
+# from GUI.DataView import DataViewer, GraphScreen
 
-# DataViewer = DataView()
+# Viewer = DataViewer()
 
 
 class realTime_Graph:
@@ -30,7 +30,7 @@ class realTime_Graph:
         # self.fig, self.ax =  plt.subplots()
         # self.fig.canvas.mpl_connect('close_event', self.on_close_write)
         # self.ani = FuncAnimation(self.fig, self.update_graph, interval=10)
-        # plt.show()
+        plt.show()
         
 
     async def receive_data(self):
@@ -44,7 +44,6 @@ class realTime_Graph:
                 await self.update_graph(graph_data)
             
     async def update_graph(self, graph_data):
-        
         self.time = self.time[1:]
         self.time.append(self.time[-1]+1)
         self.value = self.value[1:]
@@ -73,5 +72,5 @@ if __name__ == '__main__':
 
 
     # app = QApplication(sys.argv)
-    # view = DataViewer()
+    # view = Viewer()
     # sys.exit(app.exec())
