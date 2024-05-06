@@ -2,6 +2,8 @@
 *.lock
 *.log
 *.db
+*.csv
+*.xlsx
 
 __pycache__/
 .venv/
