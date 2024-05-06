@@ -1,7 +1,10 @@
 import sys
 import time
 import json
+import csv
 import matplotlib.pyplot as plt
+# from matplotlib.animation import FuncAnimation
+
 import asyncio
 from requests import Session
 
@@ -24,6 +27,11 @@ class realTime_Graph:
         self.url = url
         self.time = list(range(100))
         self.value = list(range(100))
+        # self.fig, self.ax =  plt.subplots()
+        # self.fig.canvas.mpl_connect('close_event', self.on_close_write)
+        # self.ani = FuncAnimation(self.fig, self.update_graph, interval=10)
+        # plt.show()
+        
 
     async def receive_data(self):
         session = Session()
@@ -47,6 +55,13 @@ class realTime_Graph:
         plt.ylabel('value')
         plt.title('fake-Stream data graph')
         plt.pause(0.1)
+    
+    # async def on_close_write(self):
+    #     with open('recive_data.csv', 'w', newline='') as f:
+    #         writer = csv.writer(f)
+    #         writer.writerow(['time','value'])
+    #         for t, v in zip(self.time, self.value):
+    #             writer.writerow([t, v])
 
     def start(self):
         asyncio.run(self.receive_data())
