@@ -1,13 +1,15 @@
 from data_provider.data_loader import Dataset_BIVA, Dataset_Pred
+from data_provider.data_loader_CSCIDS import Dataset_CSCIDS2017, Dataset_CSCIDS2017_Pred
 from torch.utils.data import DataLoader
 
 data_dict = {
-    'BIVA': Dataset_BIVA,
+    'BIVA': [Dataset_BIVA, Dataset_Pred],
     # 'stats_DFM' : Dataset_DFM
+    'CSCIDS2017' : [Dataset_CSCIDS2017, Dataset_CSCIDS2017_Pred],
 }
 
 def data_provider(args, flag):
-    Data = data_dict[args.data]
+    Data = data_dict[args.data][0]
     timeenc = 0 if args.embed != 'timeF' else 1
 
     if flag == 'test':
@@ -21,7 +23,7 @@ def data_provider(args, flag):
         drop_last = False
         batch_size = 1
         freq = args.freq
-        Data = Dataset_Pred
+        Data = data_dict[args.data][1]
 
     else:
         shuffle_flag = True

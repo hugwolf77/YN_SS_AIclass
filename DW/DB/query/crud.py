@@ -7,5 +7,5 @@ def get_items(db: Session):
     return db.query(Base).all()
 
 def get_item(ind,db:Session):
-    return db.query(CSCIDS2017_BALANCED_ATTK).filter(CSCIDS2017_BALANCED_ATTK.Index.in_([ind])).first()
+    return db.query(Base).filter(CSCIDS2017_BALANCED_ATTK.Index.in_([ind])).first()
 
