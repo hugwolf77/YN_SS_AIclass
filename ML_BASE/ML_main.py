@@ -7,11 +7,13 @@ class ML_runway:
       self.device = device
       self.model = MODEL_CLASS[NM]["model"]
       self.loader = MODEL_CLASS[NM]["loader"] 
+      self.trainer = MODEL_CLASS[NM]["trainer"]
       self.predicter = MODEL_CLASS[NM]["predicter"]
       self.agg = MODEL_CONFIG[NM]
-       
-   def train(self):
-      pass
+
+
+   # def train(self): # arg 입력을 통일할 필요가 있음.
+   #    return self.trainer(self.model, self.loader self.agg, print_every=1)
    
    def validation(self):
       pass

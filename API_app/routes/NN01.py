@@ -27,8 +27,8 @@ ml_models = {}
 @asynccontextmanager
 async def lifespan(app: APIRouter, NM):
     # Load the ML model
-    model = ML_runway(NM)
-    ml_models["NN01"] = model.predict
+    ml_models["predict"] = ML_runway(NM).predict
+    ml_models["train"] = ML_runway(NM).train
     yield
     ml_models.clear()
 
@@ -76,5 +76,14 @@ async def chart_data(request: Request):
 async def NN01_predict(request_input: DataInput, request: Request):
     client_ip = request.client.host
     logger.info("Client %s connected for prediction result", client_ip)
-    result =  ml_models["NN01"](request_input.x)
+    result =  ml_models["predict"](request_input.x)
+    return {'prediction' : result}
+
+
+
+@NN01.post("/train", tags=['NN01'], response_model=PredictOutput)
+async def NN01_train(request: Request):
+    client_ip = request.client.host
+    logger.info("Client %s connected for train", client_ip)
+    result =  ml_models["train"]
     return {'prediction' : result}
