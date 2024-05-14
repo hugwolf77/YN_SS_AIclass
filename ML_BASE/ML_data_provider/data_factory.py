@@ -1,5 +1,5 @@
-from data_provider.data_loader import Dataset_BIVA, Dataset_Pred
-from data_provider.data_loader_CSCIDS import Dataset_CSCIDS2017, Dataset_CSCIDS2017_Pred
+from ML_data_provider.data_loader import Dataset_BIVA, Dataset_Pred
+from ML_data_provider.data_loader_CSCIDS import Dataset_CSCIDS2017, Dataset_CSCIDS2017_Pred
 from torch.utils.data import DataLoader
 
 data_dict = {
