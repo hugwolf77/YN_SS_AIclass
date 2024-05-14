@@ -1,6 +1,6 @@
 from ML_BASE.ML_operate.operator import prediction, validation, training
 from ML_BASE.ML_models.LSTM_ex01 import RNN
-from ML_BASE.data_provider.ML_DataReady import dataloader
+from ML_BASE.data_provider.data_factory import data_provider
 
 class ML_runway:
     def __init__(self, NM, device="cpu") -> None:
@@ -22,11 +22,20 @@ class ML_runway:
 MODEL_CLASS = { 
             "NN01" : {
                         "model" : RNN,
-                        "loader" : dataloader,
+                        "loader" : data_provider,
+                        "trainer" : training,
+                        "validater" : validation,
+                        "predicter" : prediction,
+                     },
+            
+            "NN01" : {
+                        "model" : RNN,
+                        "loader" : data_provider,
                         "trainer" : training,
                         "validater" : validation,
                         "predicter" : prediction,
                      }
+            
             }
 
 MODEL_CONFIG = {

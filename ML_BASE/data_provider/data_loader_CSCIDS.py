@@ -41,7 +41,7 @@ class Dataset_CSCIDS2017(Dataset):
         cols = list(df.columns)
         
     
-class Dataset_CSCIDS2017(Dataset):
+class Dataset_CSCIDS2017_Pred(Dataset):
     def __init__(self, root_path, flag='train', size=None, features='MS', data_path='custom.csv',
                  target='GDP', scale=True, inverse=False, timeenc=0, freq='m', cols=None):
         pass
