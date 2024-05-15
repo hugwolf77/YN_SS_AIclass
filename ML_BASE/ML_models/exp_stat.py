@@ -1,7 +1,7 @@
-from data_provider.data_factory import data_provider
-from exp_basic import Exp_Basic
-from utils.tools import EarlyStopping, adjust_learning_rate, visual
-from utils.metrics import metric
+from ML_data_provider.data_factory import data_provider
+from ML_BASE.ML_basic import Exp_Basic
+from ML_operate.tools import EarlyStopping, adjust_learning_rate, visual
+from ML_operate.metrics import metric
 
 import numpy as np
 import torch
@@ -12,7 +12,7 @@ import os
 import time
 import warnings
 import matplotlib.pyplot as plt
-from model.Stat_models import *
+# from model.Stat_models import *
 
 warnings.filterwarnings('ignore')
 
@@ -22,15 +22,16 @@ class Exp_Main(Exp_Basic):
         super(Exp_Main, self).__init__(args)
 
     def _build_model(self):
-        model_dict = {
-            'Naive': Naive_repeat,
-            'ARIMA': Arima,
-            'SARIMA': SArima,
-            'DFM': DFM,
-        }
-        model = model_dict[self.args.model](self.args).float()
+        pass
+        # model_dict = {
+        #     'Naive': Naive_repeat,
+        #     'ARIMA': Arima,
+        #     'SARIMA': SArima,
+        #     'DFM': DFM,
+        # }
+        # model = model_dict[self.args.model](self.args).float()
 
-        return model
+        # return model
 
     def _get_data(self, flag):
         data_set, data_loader = data_provider(self.args, flag)
