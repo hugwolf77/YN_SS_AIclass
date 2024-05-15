@@ -8,7 +8,6 @@ from DW.DB.connection import conn_db, get_session
 from DW.DB.query import crud
 # from DW.DB.db_models import test_model
 # from apis import test # main logic
-from DW.DB.connection import get_session
 from DW.DB.query import crud
 from DW.DB.db_models import base_model
 from API_app.apis import test # main logic
