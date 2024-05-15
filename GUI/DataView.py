@@ -8,10 +8,8 @@ from PySide6.QtUiTools import QUiLoader
 
 from .GraphScreen import GraphScreen
 
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy import select
-from DW.DB.connection import conn_db, get_session
-from DW.DB.query.crud import get_items, get_item
+from DW.DB.connection import conn_db
 from DW.DB.db_models.CSCIDS2017 import CSCIDS2017_BALANCED_ATTK
 
 
